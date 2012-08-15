@@ -236,6 +236,30 @@ namespace FB
                                                 bool cache = true, bool seekable = false,
                                                 size_t internalBufferSize = 128 * 1024 ) const;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @fn virtual BrowserStreamPtr createPostStreamWithheader(const std::string& url, const PluginEventSinkPtr& callback,
+        /// const str:string header, const str::string postdata, bool cache = true, bool seekable = false, size_t internalBufferSize = 128 * 1024 ) const
+        ///
+        /// @brief  Creates a BrowserStream.
+        ///
+        /// @todo   Document this better
+        ///
+        /// @param  url                 URL of the document to request.
+        /// @param  callback            PluginEventSink to send status updates to (usually your Plugin class
+        ///                             derived from PluginCore)
+        /// @param  header              String with custom headers, last header terminated by a single new line
+        ///                             so that additional headers could be added
+        /// @param  postdata               data to post.
+        /// @param  cache               true to cache.
+        /// @param  seekable            true if the Stream should be seekable.
+        /// @param  internalBufferSize  Size of the internal buffer.
+        ///
+        /// @return null if it fails, else BrowserStream object
+        /// @todo this should probably be a shared_ptr instead of a normal ptr
+		FB::BrowserStreamPtr createPostStreamWithHeader( const std::string& url,
+                                                const PluginEventSinkPtr& callback, const std::string& header,
+                                                const std::string& postdata, bool cache /*= true*/,
+                                                bool seekable /*= false*/, size_t internalBufferSize /*= 128 * 1024 */ ) const;
         // Methods for accessing the DOM
     public:
 
@@ -451,6 +475,10 @@ namespace FB
                                             size_t internalBufferSize = 128 * 1024 ) const = 0;
         virtual BrowserStreamPtr _createPostStream(const std::string& url, const PluginEventSinkPtr& callback,
                                             const std::string& postdata,
+                                            bool cache = true, bool seekable = false,
+                                            size_t internalBufferSize = 128 * 1024 ) const = 0;
+        virtual BrowserStreamPtr _createPostStreamWithHeader(const std::string& url, const PluginEventSinkPtr& callback,
+                                            const std::string& header, const std::string& postdata,
                                             bool cache = true, bool seekable = false,
                                             size_t internalBufferSize = 128 * 1024 ) const = 0;
     public:

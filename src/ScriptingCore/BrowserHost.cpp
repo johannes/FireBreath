@@ -363,6 +363,18 @@ FB::BrowserStreamPtr FB::BrowserHost::createPostStream( const std::string& url,
     return ptr;
 }
 
+FB::BrowserStreamPtr FB::BrowserHost::createPostStreamWithHeader( const std::string& url,
+    const PluginEventSinkPtr& callback, const std::string& header, const std::string& postdata, 
+    bool cache /*= true*/, bool seekable /*= false*/, size_t internalBufferSize /*= 128 * 1024 */ ) const
+{
+    assertMainThread();
+    FB::BrowserStreamPtr ptr(_createPostStreamWithHeader(url, callback, header, postdata, cache, seekable, internalBufferSize));
+    if (ptr) {
+        m_streamMgr->retainStream(ptr);
+    }
+    return ptr;
+}
+
 bool FB::BrowserHost::DetectProxySettings( std::map<std::string, std::string>& settingsMap, const std::string& url )
 {
     return FB::SystemProxyDetector::get()->detectProxy(settingsMap, url);

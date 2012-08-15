@@ -52,6 +52,20 @@ FB::SimpleStreamHelperPtr FB::SimpleStreamHelper::AsyncPost( const FB::BrowserHo
     return ptr;
 }
 
+FB::SimpleStreamHelperPtr FB::SimpleStreamHelper::AsyncPostWithHeader( const FB::BrowserHostPtr& host, const FB::URI& uri, const std::string& header, 
+                                                           const std::string& postdata, const HttpCallback& callback, bool cache /*= true*/, size_t bufferSize /*= 256*1024*/ )
+{
+    if (!host->isMainThread()) {
+        // This must be run from the main thread
+        return host->CallOnMainThread(boost::bind(&FB::SimpleStreamHelper::AsyncPostWithHeader, host, uri, header, postdata, callback, cache, bufferSize));
+    }
+    FB::SimpleStreamHelperPtr ptr(boost::make_shared<FB::SimpleStreamHelper>(callback, bufferSize));
+    // This is kinda a weird trick; it's responsible for freeing itself, unless something decides
+    // to hold a reference to it.
+    ptr->keepReference(ptr);
+    FB::BrowserStreamPtr stream(host->createPostStreamWithHeader(uri.toString(), ptr, header, postdata, cache, false, bufferSize));
+    return ptr;
+}
 
 struct SyncHTTPHelper
 {
