@@ -766,7 +766,7 @@ FB::BrowserStreamPtr NpapiBrowserHost::_createPostStream(const std::string& url,
 {
     std::stringstream headers;
     headers << "Content-type: application/x-www-form-urlencoded\n";
-    headers << "Content-Length: " << postdata.length() << "\n\n";
+    headers << "Content-Length: " << postdata.length() << "\n";
     headers << postdata;
 
 	return _createPostStreamWithHeader(url, callback, headers.str(), postdata, cache, seekable, internalBufferSize);
